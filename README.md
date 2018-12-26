@@ -15,4 +15,10 @@ stack
 - `notify-send` (libnotify)
 - `pulseaudio-ctl` (PulseAUdio, pulseaudio-ctl)
 - `xdg-user-dir` (xdg-user-dirs)
+- Droid Sans Mono font
 - Gnome stack
+
+## Utilities
+
+- autorandr (https://github.com/phillipberndt/autorandr)
+- arandr

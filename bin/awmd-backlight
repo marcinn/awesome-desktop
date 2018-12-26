@@ -14,10 +14,6 @@ else
 fi
 
 case $CMD in
-    get)
-        xbacklight
-        exit 0
-        ;;
     up)
         xbacklight -inc "$PRC";;
     down)
@@ -36,30 +32,20 @@ case $CMD in
     set)
         xbacklight -set $OPT -time 1
         xbacklight
-        exit 0
+        ;;
+    get)
         ;;
     *)
-        xbacklight
-        exit 0
         ;;
 esac
 
 VAL=`xbacklight`
 
-AVAIL_PIDS=`pgrep -f "osd_cat.*Brightness"`
-
-for i in "${AVAIL_PIDS[@]}"
-do
-    if [[ $i != "" ]]; then
-        kill $i
-    fi
-done
-
 case $OPT in
     quiet)
         ;;
     *)
-        osd_cat --pos="bottom" --align="center" --delay=2 --colour=white --barmode=percentage --text="Brightness" --percentage="$VAL" --font="-*-droid sans mono-*-*-*-*-100-*-*-*-*-*" -s 2 &
+        `dirname "$0"`/awmd-osd --pos="bottom" --align="center" --delay=2 --colour=white --barmode=percentage --text="Brightness" --percentage="$VAL"
         ;;
 esac
 

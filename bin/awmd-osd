@@ -1,0 +1,22 @@
+#!/bin/bash
+
+PIDFILE="/tmp/.`whoami`.awmd-osd.pid"
+PID=""
+
+if [[ -f "$PIDFILE" ]]; then
+    PID=`cat "$PIDFILE"`
+fi
+
+if [[ -n $PID ]]; then
+    if [[ -d "/proc/$PID" ]]; then
+        CMDNAME=`cat /proc/$PID/comm`
+        if [[ $CMDNAME == "osd_cat" ]]; then
+            kill -9 $PID && echo "" >$PIDFILE
+        fi
+    else
+        echo "" >$PIDFILE
+    fi
+fi
+
+osd_cat --font="-*-droid sans mono-*-*-*-*-100-*-*-*-*-*" -s 2 "$@" &
+echo $! >$PIDFILE

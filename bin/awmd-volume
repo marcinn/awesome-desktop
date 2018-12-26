@@ -29,13 +29,6 @@ case $MODE in
         ;;
 esac
 
-AVAIL_PIDS=`pgrep -f "osd_cat.*(Volume|MUTE)"`
-
-for i in "${AVAIL_PIDS[@]}"
-do
-       kill $i;
-done
-
 readstate
 
 if [ "$MUTED" == "yes" ]; then
@@ -44,4 +37,4 @@ else
     TEXT="Volume $VOLUME%"
 fi
 
-osd_cat --pos="bottom" --align="center" --delay=2 --colour=green --barmode=percentage --text="$TEXT" --percentage="$VOLUME" --font="-*-droid sans mono-*-*-*-*-100-*-*-*-*-*" -s 2 &
+/bin/bash `dirname "$0"`/awmd-osd --pos="bottom" --align="center" --delay=2 --colour=green --barmode=percentage --text="$TEXT" --percentage="$VOLUME"
