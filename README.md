@@ -14,4 +14,5 @@ stack
 - `convert` (ImageMagick)
 - `notify-send` (libnotify)
 - `pulseaudio-ctl` (PulseAUdio, pulseaudio-ctl)
+- `xdg-user-dir` (xdg-user-dirs)
 - Gnome stack
