@@ -1,0 +1,47 @@
+#!/bin/bash
+
+function readstate() {
+    VOLUMEINFO=(`pulseaudio-ctl full-status`)
+    VOLUME=${VOLUMEINFO[0]}
+    MUTED=${VOLUMEINFO[1]}
+}
+
+MODE=$1
+
+function autounmute() {
+    readstate
+    if [ "$MUTED" == "yes" ]; then
+        pulseaudio-ctl mute
+    fi
+}
+
+case $MODE in
+    up)
+        autounmute
+        pulseaudio-ctl up 5%
+        ;;
+    down)
+        autounmute
+        pulseaudio-ctl down 5%
+        ;;
+    mute)
+        pulseaudio-ctl mute
+        ;;
+esac
+
+AVAIL_PIDS=`pgrep -f "osd_cat.*(Volume|MUTE)"`
+
+for i in "${AVAIL_PIDS[@]}"
+do
+       kill $i;
+done
+
+readstate
+
+if [ "$MUTED" == "yes" ]; then
+    TEXT="-- MUTE --"
+else
+    TEXT="Volume $VOLUME%"
+fi
+
+osd_cat --pos="bottom" --align="center" --delay=2 --colour=green --barmode=percentage --text="$TEXT" --percentage="$VOLUME" --font="-*-droid sans mono-*-*-*-*-100-*-*-*-*-*" -s 2 &

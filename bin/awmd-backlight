@@ -1,0 +1,66 @@
+#!/bin/bash
+
+CMD=$1
+OPT=$2
+CURRENTF=`xbacklight`
+CURRENT=${CURRENTF%.*}
+SLOWTHRESHOLD=5
+MODE="change"
+
+if (( $CURRENT <= $SLOWTHRESHOLD )); then
+    PRC="1%"
+else
+    PRC="5%"
+fi
+
+case $CMD in
+    get)
+        xbacklight
+        exit 0
+        ;;
+    up)
+        xbacklight -inc "$PRC";;
+    down)
+        if (( $CURRENT > $SLOWTHRESHOLD )); then
+            NEWCURRENT=`bc -l <<< "$CURRENT-$SLOWTHRESHOLD"`
+            echo $NEWCURRENT
+            if (( $NEWCURRENT <= $SLOWTHRESHOLD )); then
+                xbacklight -set $SLOWTHRESHOLD -time 1
+            else
+                xbacklight -dec "$PRC" -time 1
+            fi
+        else
+            xbacklight -dec "$PRC" -time 1
+        fi
+        ;;
+    set)
+        xbacklight -set $OPT -time 1
+        xbacklight
+        exit 0
+        ;;
+    *)
+        xbacklight
+        exit 0
+        ;;
+esac
+
+VAL=`xbacklight`
+
+AVAIL_PIDS=`pgrep -f "osd_cat.*Brightness"`
+
+for i in "${AVAIL_PIDS[@]}"
+do
+    if [[ $i != "" ]]; then
+        kill $i
+    fi
+done
+
+case $OPT in
+    quiet)
+        ;;
+    *)
+        osd_cat --pos="bottom" --align="center" --delay=2 --colour=white --barmode=percentage --text="Brightness" --percentage="$VAL" --font="-*-droid sans mono-*-*-*-*-100-*-*-*-*-*" -s 2 &
+        ;;
+esac
+
+echo $VAL

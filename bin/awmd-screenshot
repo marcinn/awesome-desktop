@@ -1,0 +1,38 @@
+#!/bin/bash
+
+MODE=$1
+DEST=$2
+
+case $DEST in
+    clipboard)
+        PARAMS=-c
+        ;;
+    *)
+        FILE="`xdg-user-dir PICTURES`/Screenshot_`date +%Y%m%d_%H%M%S`.png"
+        PARAMS="-f $FILE"
+        ;;
+esac
+
+case $MODE in
+    screen)
+        gnome-screenshot $PARAMS -d 0
+        ;;
+    area)
+        gnome-screenshot $PARAMS -a
+        ;;
+    *)
+        echo "Usage:"
+        echo "$0 <mode> <destination>"
+        echo ""
+        echo "mode: screen|area"
+        echo "destination: clipboard|name-of-the-file"
+        exit 1
+        ;;
+esac
+
+if [[ -n "$FILE" ]]; then
+    THUMB=`mktemp`
+    convert "$FILE" -resize 256x256 "$THUMB"
+    notify-send -i "$THUMB" "Screenshot taken"
+    rm "$THUMB"
+fi
