@@ -26,6 +26,7 @@ stack
 - most of configs/themes available on the web, are built from scratch, incompatible, and have poor quality
 - most of widgets available on the web have poor quality
 - **there is no complete DE built top of AwesomeWM** - everyone **must** create own enviroment based on `rc.lua` variations
+- Gnome3 delivers a good stack and utilities
 
 ## Dependencies
 
