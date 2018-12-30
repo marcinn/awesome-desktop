@@ -11,6 +11,8 @@ local vicious = require("vicious")
 local watch = require("awful.widget.watch")
 local switcher = require("awesome-switcher")
 local PATH_TO_ICONS = "/usr/share/icons/Arc/status/symbolic/"
+local awmd_menu = require("awmd-menu")
+local awmd = require("awmd")
 
 local glib = require("lgi").GLib
 local DateTime = glib.DateTime
@@ -42,7 +44,15 @@ function month_calendar.call_calendar(self, offset, position, screen)
     local screen = awful.screen.focused()
 	awful.widget.calendar_popup.call_calendar(self, offset, position, screen)
 end
+mytextclock = wibox.widget.textclock(awmd.conf.clock_format)
 month_calendar:attach(mytextclock, "tr")
+awmd.connect_signal('config::changed',  function()
+    -- unsupported in 4.2 yet
+    -- mytextclock:set_format(awmd.conf.clock_format)
+    -- mytextclock:emit_signal('timeout')
+    --
+    -- maybe ask for awesome.restart() ?
+end)
 
 local bt_widget = wibox.widget {
     {
@@ -65,10 +75,7 @@ watch("bluetooth", 11,
 end, bt_widget)
 
 
-local mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
-                                  }
-                        })
+local mymainmenu = awmd_menu.get_desktop_menu()
 
 local mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
