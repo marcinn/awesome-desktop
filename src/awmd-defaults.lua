@@ -10,7 +10,7 @@ local defaults = {
     init = function()
         local awmd = require("awmd")
         local tags = awmd.getTags()
-        local modkey = awful.util.modkey
+        local modkey = awmd.conf.modkey
 
         -- Table of layouts to cover with awful.layout.inc, order matters.
         awful.layout.layouts = {
@@ -58,7 +58,7 @@ local defaults = {
             awful.key({}, "XF86AudioMute", function () awful.spawn.with_shell("~/bin/volumectl mute") end,
                       {description = "toggle mute", group = "multimedia"}),
 
-            awful.key({}, "XF86Search", function () awful.spawn(search_cmd) end,
+            awful.key({}, "XF86Search", function () awful.spawn(awmd.conf.commands.search) end,
                       {description = "search", group = "launcher"}),
 
             awful.key({}, "XF86MonBrightnessDown", function () awful.spawn.with_shell("~/bin/backlightctl down") end,
@@ -89,9 +89,9 @@ local defaults = {
                 {description = "go back", group = "client"}),
 
             -- Standard program
-            awful.key({ modkey, "Shift" }, "Delete", function () awful.spawn(system_monitor) end,
+            awful.key({ modkey, "Shift" }, "Delete", function () awful.spawn(awmd.conf.commands.system_monitor) end,
                       {description = "system monitor", group = "system"}),
-            awful.key({ modkey, "Control" }, "l", function () awful.spawn(lock) end,
+            awful.key({ modkey, "Control" }, "l", function () awful.spawn(awmd.conf.commands.lock) end,
                       {description = "lock screen", group = "awesome"}),
             awful.key({ "Shift" }, "Print", function () awful.spawn.with_shell("~/bin/screenshotctl area") end,
                       {description = "screenshot of selected area", group = "multimedia"}),
@@ -101,7 +101,7 @@ local defaults = {
                       {description = "screenshot", group = "multimedia"}),
             awful.key({ "Control" }, "Print", function () awful.spawn.with_shell("~/bin/screenshotctl screen clipboard") end,
                       {description = "screenshot (clipboard)", group = "multimedia"}),
-            awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
+            awful.key({ modkey,           }, "Return", function () awful.spawn(awmd.conf.commands.terminal) end,
                       {description = "open a terminal", group = "multimedia"}),
             awful.key({ modkey, "Control" }, "r", awesome.restart,
                       {description = "reload awesome", group = "awesome"}),

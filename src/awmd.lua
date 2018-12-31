@@ -16,10 +16,19 @@ local clientkeys = {}
 local extensions = {}
 local installable_extensions = {}
 local active_extensions = {}
-local tags = {"1", "2", "3", "4"}
 local desktopsettings = {}
 local dconfschemas = {}
-local awmd_config = {}
+local awmd_config = {
+    commands = {
+        terminal = 'gnome-terminal',
+        search = 'nautilus',
+        system_monitor = 'gnome-system-monitor',
+        editor = 'gedit',
+        lock_screen = 'i3lock-fancy -b=20x20',
+    },
+    tags = {"1", "2", "3", "4"},
+    modkey = 'Mod4',
+}
 local awmd_object = gears.object { enable_properties = false, class = 'AWMD' }
 
 local _desktopsettingschemas = {
@@ -185,7 +194,7 @@ local awmd = {
         clientkeys = gears.table.join(clientkeys, table)
     end,
     getTags = function()
-        return tags
+        return awmd_config.tags
     end,
     registerExtension = registerExtension,
     loadExtension = loadExtension,
@@ -294,5 +303,18 @@ do
     end)
 end
 -- }}}
+
+
+-- awmd initialization
+
+awmd.init = function()
+    awmd.initializeTheme()
+    awmd.enableExtension("alttab_window_switcher")
+    awmd.enableExtension("application_launcher")
+    awmd.initializeEnabledExtensions()
+    awful.screen.connect_for_each_screen(function(s) 
+        awmd.onScreenInit(s)
+    end)
+end
 
 return awmd

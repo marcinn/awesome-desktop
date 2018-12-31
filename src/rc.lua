@@ -1,34 +1,7 @@
 local awful = require("awful")
 local awmd = require("awmd")
 
--- TODO: default commands should be moved to awmd, awful should not be
--- required here
-
-terminal = "gnome-terminal"
-search_cmd = "nautilus"
-system_monitor = 'gnome-system-monitor'
-editor = os.getenv("EDITOR") or "nano"
-editor_cmd = terminal .. " -e " .. editor
-lock = "i3lock-fancy -b=20x20"
-
-awful.util.terminal = terminal
-awful.util.tagnames = { " 1 ", " 2 ", " 3 ", " 4 " }
-awful.util.modkey = 'Mod4'
-
-
--- awmd initialization
-
-awmd.initializeTheme()
-awmd.enableExtension("alttab_window_switcher")
-awmd.enableExtension("application_launcher")
-awmd.initializeEnabledExtensions()
-awful.screen.connect_for_each_screen(function(s) 
-    awmd.onScreenInit(s)
-end)
-
---- end of awmd initialization
-
-
+awmd.init()
 
 -------------------------------------------------------------------
 --- 8<  the code below must be moved to amwd ext / defaults  >8 ---
@@ -36,8 +9,8 @@ end)
 local gears = require("gears")
 local beautiful = require("beautiful")
 local naughty = require("naughty")
+local modkey = awmd.conf.modkey
 
-modkey = awful.util.modkey
 
 -- {{{ Helper functions
 -- }}}
