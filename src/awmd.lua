@@ -1,3 +1,5 @@
+require("awful.autofocus")
+
 local gears = require("gears")
 local awful = require("awful")
 local naughty = require("naughty")
@@ -5,8 +7,9 @@ local beautiful = require("beautiful")
 local lgi = require("lgi")
 local gtk = lgi.require("Gtk")
 local gio = lgi.require("Gio")
+local gfs = require("gears.filesystem")
 
-local THEMES_PATH = "~/.config/awesome/themes/"
+local THEMES_PATH = gfs.get_configuration_dir() .. 'themes/'
 
 local globalkeys = {}
 local clientkeys = {}
@@ -20,7 +23,8 @@ local awmd_config = {}
 local awmd_object = gears.object { enable_properties = false, class = 'AWMD' }
 
 local _desktopsettingschemas = {
-    "org.gnome."
+    "org.gnome.",
+    "org.awesomewm.",
 }
 
 local icontheme = gtk.IconTheme.get_default()
@@ -78,6 +82,14 @@ function updateAWMDConfig()
     else
         awmd_config['clock_format'] = "%a %b %d, %l:%M%P"
     end
+
+    gears.table.crush(awmd_config, {
+        icon_theme = get_desktop_setting(
+            'org.gnome.desktop.interface', 'icon-theme', 'Arc'),
+        font_name = get_desktop_setting(
+            'org.gnome.desktop.interface', 'font-name', 'Roboto 12')
+    })
+
     awmd_object:emit_signal('config::changed')
 end
 
@@ -119,9 +131,12 @@ end
 function get_desktop_setting(schema, key, default)
     -- read setting from dconf registry and update local cache
     local s = dconfschemas[schema] or nil
-    if not s then return default end
-    if not dconf_schema_has_key(s, key) then return default end
-    local v = s:get_string(key) or nil
+    local v = default
+    if s then
+        if dconf_schema_has_key(s, key) then
+            v = s:get_string(key) or default
+        end
+    end
     desktopsettings[schema][key] = v
     return v
 end
@@ -142,8 +157,7 @@ function desktop_setup_screen_wallpaper(s)
         beautiful.fallback_wallpaper)
     if wall then
         local mode = get_desktop_setting(
-        "org.gnome.desktop.background", "picture-options",
-        "zoom")
+            "org.gnome.desktop.background", "picture-options", "zoom")
         if mode == "zoom" then
             gears.wallpaper.maximized(wall:gsub("^file://", ""), s)
         elseif mode == "wallpaper" then
@@ -201,7 +215,7 @@ local awmd = {
         end
     end,
     initializeTheme = function()
-        beautiful.init(THEMES_PATH .. "marcin/theme.lua")
+        beautiful.init(THEMES_PATH .. "awmd/theme.lua")
     end,
     lookupIcon = function(name, size)
         return icontheme.lookup_icon(name, size or 24, 0)
@@ -234,9 +248,15 @@ dconf_schema_connect(
         desktop_setup_screen_wallpaper()
     end)
 
+-- auto refresh intenal config
+
 dconf_schema_connect(
     'org.gnome.desktop.interface', 'change-event',
-    updateAWMDConfig)
+    function()
+        updateAWMDConfig()
+        beautiful.init(THEMES_PATH .. "marcin/theme.lua")
+        -- TODO: refresh/redraw wibox/widgets
+    end)
 
 -- load defaults
 
