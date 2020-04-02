@@ -4,7 +4,7 @@ local spawn = require("awful.spawn")
 os.execute("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &")
 
 -- compositor
-os.execute("picom --backend glx --paint-on-overlay --vsync &")
+os.execute("picom --backend glx --paint-on-overlay --vsync -I 1 -O 1 -D 0 &")
 
 os.execute("killall -9 pamac-tray")
 os.execute("pamac-tray &")
