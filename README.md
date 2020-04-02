@@ -27,6 +27,13 @@ ln -s /path/to/awesome-desktop/src awmd
 ln -s /path/to/awesome-desktop/src/rc.lua
 ```
 
+Create required extensions:
+```
+cd ~/.config/awesome/awmd-extensions
+git clone https://github.com/pltanton/net_widgets.git
+git clone https://github.com/streetturtle/awesome-wm-widgets.git
+
+
 Create empty autostart file for your programs:
 
 ```
@@ -92,7 +99,7 @@ Restart AwesomeWM & pray.
 
 
 ### Dependencies to be moved to extensions
-- `net_widgets` (git@github.com:pltanton/net_widgets.git)
+- `net_widgets` (https://github.com/pltanton/net_widgets.git)
 - `vicious`
 - `wibox`
 - `touchpad_widget`
