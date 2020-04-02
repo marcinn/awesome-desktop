@@ -25,6 +25,7 @@ Setup symlinks:
 cd ~/.config/awesome
 ln -s /path/to/awesome-desktop/src awmd
 ln -s /path/to/awesome-desktop/src/rc.lua
+ln -s /path/to/awesome-desktop/themes/
 ```
 
 Create required extensions:
