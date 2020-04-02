@@ -9,5 +9,5 @@ awmd.init(root)
 
 --
 
-require("awmd-utostart")
+require("awmd-autostart")
 require("autostart")
