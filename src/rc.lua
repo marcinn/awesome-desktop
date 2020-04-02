@@ -1,6 +1,6 @@
 local gears = require("gears")
 local confdir = gears.filesystem.get_configuration_dir()
- package.path = confdir .. "awmd/?.lua;" .. confdir .. "awmd-extensions/      ?/init.lua;" .. package.path 
+package.path = confdir .. "awmd/?.lua;" .. confdir .. "awmd-extensions/?/init.lua;" .. package.path 
 
 --
 
