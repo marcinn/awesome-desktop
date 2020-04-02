@@ -2,6 +2,40 @@
 A simple desktop environment based on AwesomeWM framework and Gnome
 stack
 
+# Installation
+
+**Only manual installation. Makefile is in progress**
+
+Clone the repository somewhere:
+
+```
+git clone https://github.com/marcinn/awesome-desktop.git
+```
+
+Make required directories:
+
+```
+mkdir ~/.config/awesome
+mkdir ~/.config/awesome/awmd-extensions
+```
+
+Setup symlinks:
+
+```
+cd ~/.config/awesome
+ln -s /path/to/awesome-desktop/src awmd
+ln -s /path/to/awesome-desktop/src/rc.lua
+```
+
+Create empty autostart file for your programs:
+
+```
+touch ~/.config/awesome/autostart.lua
+```
+
+Install required dependencies.
+Restart AwesomeWM & pray.
+
 ## Goals
 
 - **configuration and extensibility without mmodyfiing LUA code**
@@ -30,25 +64,52 @@ stack
 
 ## Dependencies
 
-- `osd_cat`
-- `nmcli` (NetworkManager)
-- `xbacklight`
-- `python` (Python 3)
+- `awesome-desktop` (from Arch User Repository or something similar):
+  session and configuration files which runs AwesomeWM as a Gnome
+  session
+- `osd_cat` (xosd): display OSD
+- `polkit-gnome-authentication-agent-1` (polkit-gnome): authentication
+  agent
+- `picom`: compositor
+- `nmcli` (NetworkManager): manage and retrieve info about networking
+- `xbacklight` (acpilight, xorg-xbacklight): control laptop backlight
+- `python` (Python 3): for utilities
 - `python-gobject`
-- `gnome-screenshot` (Gnome Screenshot)
-- `convert` (ImageMagick)
-- `notify-send` (libnotify)
-- `pulseaudio-ctl` (PulseAUdio, pulseaudio-ctl)
-- `xdg-user-dir` (xdg-user-dirs)
-- Droid Sans Mono font
+- `gnome-screenshot` (Gnome Screenshot): take screenshots
+- `convert` (ImageMagick): for lockscreen blur
+- `notify-send` (libnotify): send desktop notifications
+- `pulseaudio-ctl` (PulseAUdio, pulseaudio-ctl): manage audio
+- `xdg-user-dir` (xdg-user-dirs): read user dirs
+- `lain`: widgets and utilities for AwesomeWM
+- `lgi` (GLib for LUA): access GObject libraries
+- `Droid Sans Mono` font: used in default theme
+- `xidlehook` and `i3lock-fancy`: locking screen
+- `pa-applet`: volume control applet (pulseaudio)
+- `nm-applet`: tray icon for network manager
+- `xflux`: night mode
+- `rofi`: powerful app launcher / window switcher
 - Gnome stack
 
 
-## Optional dependencies
+### Dependencies to be moved to extensions
+- `net_widgets` (git@github.com:pltanton/net_widgets.git)
+- `vicious`
+- `wibox`
+- `touchpad_widget`
+- `awesome-wm-widgets`
 
-- rofi
 
-## Utilities
+### Optional dependencies
 
+- `awesome-switcher`
+
+### Optional utilities
+
+- `synclient` and `syndaemon`: handling touchpad options
+- `pamac-tray`: display notification about Manjaro/Arch updates in tray
+
+Setup multihead:
+- `xrandr`: manual setup
 - autorandr (https://github.com/phillipberndt/autorandr)
 - arandr
+

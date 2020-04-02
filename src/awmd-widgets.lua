@@ -9,7 +9,6 @@ local dpi = xresources.apply_dpi
 local net_widgets = require("net_widgets")
 local vicious = require("vicious")
 local watch = require("awful.widget.watch")
-local switcher = require("awesome-switcher")
 local PATH_TO_ICONS = "/usr/share/icons/Arc/status/symbolic/"
 local awmd_menu = require("awmd-menu")
 local awmd = require("awmd")
