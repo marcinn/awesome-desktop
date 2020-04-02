@@ -6,13 +6,6 @@ function git_install(ext)
     awful.spawn("git clone "+ext.url)
 end
 
-local synapse_application_launcher = {
-    factory = function()
-        os.execute("killall -9 synapse")
-        os.execute("synapse -s &")
-    end
-}
-
 local menubar_application_launcher = {
     modulename = 'menubar',
     factory = function(menubar)
@@ -50,8 +43,7 @@ local known_extensions = {
                 )
             }
         end
-    },
-    application_launcher = synapse_application_launcher
+    }
 }
 
 return known_extensions

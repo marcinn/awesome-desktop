@@ -43,6 +43,11 @@ stack
 - Droid Sans Mono font
 - Gnome stack
 
+
+## Optional dependencies
+
+- rofi
+
 ## Utilities
 
 - autorandr (https://github.com/phillipberndt/autorandr)

@@ -11,6 +11,7 @@ local awesomemenu = {
    { "hotkeys", function() return false, hotkeys_popup.show_help end},
    { "restart", awesome.restart },
    { "quit", "gnome-session-quit --logout --force" },
+   { "shutdown", function () awful.spawn.with_shell("~/bin/awmd-logout") end },
 }
 
 local desktopmenu = {

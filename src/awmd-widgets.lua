@@ -37,7 +37,6 @@ local wireless = net_widgets.wireless({
     onclick = "gnome-control-center network",
 })
 -- local freedesktop = require("freedesktop")
--- local mymainmenu = freedesktop.menu.build()
 
 local month_calendar = awful.widget.calendar_popup.month({})
 function month_calendar.call_calendar(self, offset, position, screen)
@@ -62,6 +61,7 @@ local bt_widget = wibox.widget {
     },
     layout = wibox.container.margin(_, 0, 0, 3)
 }
+local systray_widget = wibox.widget.systray()
 
 watch("bluetooth", 11,
     function(widget, stdout, stderr, exitreason, exitcode)
@@ -75,12 +75,12 @@ watch("bluetooth", 11,
 end, bt_widget)
 
 
-local mymainmenu = awmd_menu.get_desktop_menu()
+beautiful.menu = awmd_menu.get_desktop_menu()
 
 local mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
-                                     menu = mymainmenu })
+                                     menu = beautiful.menu })
 
-beautiful.menu = mymainmenu
+
 
 
 local function widget(w)
@@ -88,18 +88,18 @@ local function widget(w)
 end
 
 local function widgetsection(widgets, color)
-    local color = color or beautiful.widgetsection_bg or "#000000"
+    local color = color or beautiful.widget_transparent
     local result = {
-        lain.util.separators.arrow_left(beautiful.bg_normal, color),
+    --    lain.util.separators.arrow_left(beautiful.bg_normal, color),
     }   
     for _, w in pairs(widgets) do
         table.insert(result, wibox.container.background(w, color))
     end
-    table.insert(
-        result,
-        lain.util.separators.arrow_right(color, beautiful.bg_normal))
+    --table.insert(
+    --    result,
+    --    lain.util.separators.arrow_right(color, beautiful.bg_normal))
     result["layout"] = wibox.layout.fixed.horizontal
-    return result
+    return wibox.container.margin(wibox.widget { result, layout = wibox.layout.fixed.horizontal }, dpi(12), dpi(12), 0, 0, beautiful.widget_transparent)
 end
 
 -- notifications history
@@ -219,13 +219,13 @@ end
 
 local taglist_buttons = gears.table.join(
                     awful.button({ }, 1, function(t) t:view_only() end),
-                    awful.button({ modkey }, 1, function(t)
+                    awful.button({ awmd.conf.modkey }, 1, function(t)
                                               if client.focus then
                                                   client.focus:move_to_tag(t)
                                               end
                                           end),
                     awful.button({ }, 3, awful.tag.viewtoggle),
-                    awful.button({ modkey }, 3, function(t)
+                    awful.button({ awmd.conf.modkey }, 3, function(t)
                                               if client.focus then
                                                   client.focus:toggle_tag(t)
                                               end
@@ -285,7 +285,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s })
+    s.mywibox = awful.wibar({ position = "top", screen = s, opacity=1.0, bg = beautiful.bg_normal })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -293,7 +293,6 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            mylauncher,
             s.mytaglist,
             s.mypromptbox,
         },
@@ -301,7 +300,7 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             mykeyboardlayout,
-            wibox.widget.systray(),
+            systray_widget,
             widgetsection({
                 widget(touchpad.widget),
             }),
