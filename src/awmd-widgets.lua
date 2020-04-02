@@ -19,7 +19,6 @@ local TimeZone = glib.TimeZone
 
 local sprtr = lain.util.separators.arrow_left(beautiful.bg_normal, "#343434")
 
-local touchpad_widget = require("touchpad-widget")
 local battery_widget = require("awesome-wm-widgets.battery-widget.battery")
 -- local weather_widget = require("awesome-wm-widgets.weather-widget.weather")
 local brightness_widget = require("awesome-wm-widgets.brightness-widget.brightness")
@@ -29,7 +28,6 @@ local cpufreq_widget = wibox.widget.textbox()
 vicious.register(cpufreq_widget, vicious.widgets.cpufreq, function(widget, data) 
         return string.format("%.1f GHz", data[2])
     end, 7, "cpu0")
-local touchpad = touchpad_widget:new({vendor="synaptic"})
 local wireless = net_widgets.wireless({
     interface="wlp2s0",
     popup_signal = true,
@@ -300,9 +298,6 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             mykeyboardlayout,
             systray_widget,
-            widgetsection({
-                widget(touchpad.widget),
-            }),
             widgetsection({
                 widget(cpu_widget),
                 widget(cpufreq_widget),
