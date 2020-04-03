@@ -2,7 +2,7 @@
 
 CMD=$1
 OPT=$2
-CURRENTF=`xbacklight`
+CURRENTF=`xbacklight -get`
 CURRENT=${CURRENTF%.*}
 SLOWTHRESHOLD=5
 LASTBACKLIGHT=/tmp/.lastbacklight
@@ -50,11 +50,9 @@ case $CMD in
     set)
         xbacklight -set $OPT -time 1
         xbacklight -get
-        exit 0
         ;;
     *)
         xbacklight -get
-        exit 0
         ;;
 esac
 

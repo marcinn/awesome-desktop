@@ -36,7 +36,9 @@ AVAIL_PIDS=`pgrep -f "osd_cat.*(Volume|MUTE)"`
 
 for i in "${AVAIL_PIDS[@]}"
 do
-    kill $i;
+    if [[ $i != "" ]]; then
+        kill $i
+    fi
 done
 
 readstate
