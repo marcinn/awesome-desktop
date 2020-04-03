@@ -26,6 +26,7 @@ cd ~/.config/awesome
 ln -s /path/to/awesome-desktop/src awmd
 ln -s /path/to/awesome-desktop/src/rc.lua
 ln -s /path/to/awesome-desktop/themes/
+ln -s /path/to/awesome-desktop/bin/
 ```
 
 Create required extensions:

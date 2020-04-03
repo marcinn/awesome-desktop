@@ -3,7 +3,6 @@ local gears = require("gears")
 local naughty = require("naughty")
 local beautiful = require("beautiful")
 
-
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 require("awful.hotkeys_popup.keys")
 
@@ -11,6 +10,7 @@ local defaults = {
     init = function(awmd)
         local tags = awmd:getTags()
         local modkey = awmd.conf.modkey
+        local commands = awmd.conf.commands
 
         -- Table of layouts to cover with awful.layout.inc, order matters.
         awful.layout.layouts = {
@@ -49,34 +49,34 @@ local defaults = {
         {description = "show main menu", group = "awesome"}),
         -- Special keys
 
-        awful.key({}, "XF86AudioRaiseVolume", function () awful.spawn.with_shell("awmd-volumectl up") end,
+        awful.key({}, "XF86AudioRaiseVolume", function () awful.spawn.with_shell(commands.volumectl .. " up") end,
         {description = "volume +", group = "multimedia"}),
 
-        awful.key({}, "XF86AudioLowerVolume", function () awful.spawn.with_shell("awmd-volumectl down") end,
+        awful.key({}, "XF86AudioLowerVolume", function () awful.spawn.with_shell(commands.volumectl .. " down") end,
         {description = "volume -", group = "multimedia"}),
 
-        awful.key({}, "XF86AudioMute", function () awful.spawn.with_shell("awmd-volumectl mute") end,
+        awful.key({}, "XF86AudioMute", function () awful.spawn.with_shell(commands.volumectl .. " mute") end,
         {description = "toggle mute", group = "multimedia"}),
 
-        awful.key({}, "XF86AudioMicMute", function () awful.spawn.with_shell("awmd-volumectl mute-input") end,
+        awful.key({}, "XF86AudioMicMute", function () awful.spawn.with_shell(commands.volumectl .. " mute-input") end,
         {description = "toggle mic mute", group = "multimedia"}),
 
-        awful.key({}, "XF86AudioNext", function () awful.spawn.with_shell("playerctl next") end,
+        awful.key({}, "XF86AudioNext", function () awful.spawn.with_shell(commands.playerctl .. " next") end,
         {description = "next song", group = "multimedia"}),
 
-        awful.key({}, "XF86AudioPrev", function () awful.spawn.with_shell("playerctl previous") end,
+        awful.key({}, "XF86AudioPrev", function () awful.spawn.with_shell(commands.playerctl .. " previous") end,
         {description = "previous song", group = "multimedia"}),
 
-        awful.key({}, "XF86AudioPlay", function () awful.spawn.with_shell("playerctl play-pause") end,
+        awful.key({}, "XF86AudioPlay", function () awful.spawn.with_shell(commands.playerctl .. " play-pause") end,
         {description = "toggle play/pause song", group = "multimedia"}),
 
-        awful.key({}, "XF86Search", function () awful.spawn(awmd.conf.commands.search) end,
+        awful.key({}, "XF86Search", function () awful.spawn(commands.search) end,
         {description = "search", group = "launcher"}),
 
-        awful.key({}, "XF86MonBrightnessDown", function () awful.spawn.with_shell("awmd-backlightctl down") end,
+        awful.key({}, "XF86MonBrightnessDown", function () awful.spawn.with_shell(commands.backlightctl .. " down") end,
         {description = "backlight -", group = "multimedia"}),
 
-        awful.key({}, "XF86MonBrightnessUp", function () awful.spawn.with_shell("awmd-backlightctl up") end,
+        awful.key({}, "XF86MonBrightnessUp", function () awful.spawn.with_shell(commands.backlightctl .. " up") end,
         {description = "backlight +", group = "multimedia"}),
 
 
@@ -105,15 +105,15 @@ local defaults = {
         {description = "system monitor", group = "system"}),
         awful.key({ modkey, "Control" }, "l", function () awful.spawn(awmd.conf.commands.lock) end,
         {description = "lock screen", group = "awesome"}),
-        awful.key({ "Shift" }, "Print", function () awful.spawn.with_shell("awmd-screenshotctl area") end,
+        awful.key({ "Shift" }, "Print", function () awful.spawn.with_shell(commands.screenshotctl .. " area") end,
         {description = "screenshot of selected area", group = "multimedia"}),
-        awful.key({ "Control", "Shift" }, "Print", function () awful.spawn.with_shell("awmd-screenshotctl area clipboard") end,
+        awful.key({ "Control", "Shift" }, "Print", function () awful.spawn.with_shell(commands.screenshotctl .. " area clipboard") end,
         {description = "screenshot of selected area (clipboard)", group = "multimedia"}),
-        awful.key({ }, "Print", function () awful.spawn.with_shell("awmd-screenshotctl screen") end,
+        awful.key({ }, "Print", function () awful.spawn.with_shell(commands.screenshotctl .. " screen") end,
         {description = "screenshot", group = "multimedia"}),
-        awful.key({ "Control" }, "Print", function () awful.spawn.with_shell("awmd-screenshotctl screen clipboard") end,
+        awful.key({ "Control" }, "Print", function () awful.spawn.with_shell(commands.screenshotctl .. " screen clipboard") end,
         {description = "screenshot (clipboard)", group = "multimedia"}),
-        awful.key({ modkey,           }, "Return", function () awful.spawn(awmd.conf.commands.terminal) end,
+        awful.key({ modkey,           }, "Return", function () awful.spawn(commands.terminal) end,
         {description = "open a terminal", group = "multimedia"}),
         awful.key({ modkey, "Shift"   }, "q", awesome.quit,
         {description = "quit awesome", group = "awesome"}),

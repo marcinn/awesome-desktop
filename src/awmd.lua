@@ -11,6 +11,7 @@ local gfs = require("gears.filesystem")
 local awmd_menu = require("awmd-menu")
 
 local THEMES_PATH = gfs.get_configuration_dir() .. 'themes/'
+local BIN_PATH = gfs.get_configuration_dir() .. 'bin/'
 
 local extensions = {}
 local installable_extensions = {}
@@ -23,10 +24,16 @@ local awmd_config = {
         search = 'nautilus',
         system_monitor = 'gnome-system-monitor',
         editor = 'gedit',
-        lock = 'awmd-lock',
+        lock = BIN_PATH .. 'awmd-lock',
+        volumectl = BIN_PATH .. 'awmd-volumectl',
+        backlightctl = BIN_PATH .. 'awmd-backlightctl',
+        playerctl = 'playerctl',
+        screenshotctl = BIN_PATH .. 'awmd-screenshotctl',
+        displayctl = BIN_PATH .. 'awmd-dualhead',
     },
     tags = {"term", "web", "3", "talk", "5", "6"},
     modkey = 'Mod4',
+    bin_path = BIN_PATH,
 }
 local awmd_object = gears.object { enable_properties = false, class = 'AWMDObject' }
 

@@ -1,4 +1,5 @@
 local spawn = require("awful.spawn")
+local awmd = require("awmd")
 
 -- polkit / auth
 os.execute("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &")
@@ -18,10 +19,10 @@ os.execute("pa-applet --disable-key-grabbing &")
 -- locking screen
 
 os.execute("killall -9 xidlehook")
-os.execute("xidlehook --not-when-fullscreen --not-when-audio --timer 40 'awmd-backlightctl dim' 'awmd-backlightctl undim' --timer 60 'awmd-backlightctl undim && awmd-lock' '' &")
+os.execute("xidlehook --not-when-fullscreen --not-when-audio --timer 40 '" .. awmd.conf.commands.backlightctl .. " dim' '" .. awmd.conf.commands.backlightctl .. " undim' --timer 60 '" .. awmd.conf.commands.backlightctl .. " undim && awmd-lock' '' &")
 
 -- dual head setup
-os.execute("awmd-dualhead")
+os.execute(awmd.conf.commands.displayctl .. " setup")
 
 -- other
 

@@ -10,9 +10,9 @@ LASTBACKLIGHT=/tmp/.lastbacklight
 MODE="change"
 
 if (( $CURRENT <= $SLOWTHRESHOLD )); then
-    PRC="1%"
+    PRC="1"
 else
-    PRC="5%"
+    PRC="5"
 fi
 
 case $CMD in
