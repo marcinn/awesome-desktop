@@ -2,6 +2,7 @@
 
 PIDFILE="/tmp/.`whoami`.awmd-osd.pid"
 PID=""
+FONT="-*-*-*-r-*-*-80-*-*-*-m-*-*-*"
 
 if [[ -f "$PIDFILE" ]]; then
     PID=`cat "$PIDFILE"`
@@ -18,5 +19,5 @@ if [[ -n $PID ]]; then
     fi
 fi
 
-osd_cat --font="-*-droid sans mono-*-*-*-*-100-*-*-*-*-*" -s 2 "$@" &
+osd_cat --font="$FONT" -s 2 "$@" &
 echo $! >$PIDFILE

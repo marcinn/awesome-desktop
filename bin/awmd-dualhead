@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# DUALHEAD_SCALE="0.75x0.75"
+DUALHEAD_SCALE="1.0x1.0"
+
+xrandr --auto
+
+ACTIVEMONITORS=`xrandr --listmonitors | grep Monitors | cut -d : -f 2`
+MONITOROUTPUTS=`xrandr --listmonitors | egrep "[0-9]:" | cut -d\  -f 6`
+grep closed /proc/acpi/button/lid/*/state
+LIDOPEN=$?
+
+if [[ $ACTIVEMONITORS > 1 ]]; then
+    SCALE=$DUALHEAD_SCALE
+else
+    SCALE="1.0x1.0"
+fi
+
+echo $ACTIVEMONITORS
+
+echo $LIDOPEN
+
+if [[ $ACTIVEMONITORS > 2 && $LIDOPEN == 0 ]]; then
+    xrandr --auto && xrandr --output HDMI-1 --primary --output DP-2 --left-of HDMI-1 --scale $SCALE --set "Broadcast RGB" "Full" --output eDP-1 --off
+elif [[ $ACTIVEMONITORS > 2 && $LIDOPEN == 1 ]]; then
+    xrandr --auto && xrandr --output HDMI-1 --primary --output eDP-1 --right-of HDMI-1 --output DP-2 --right-of eDP-1 --scale $SCALE
+else
+    xrandr --auto && xrandr --output HDMI-1 --primary --output eDP-1 --left-of HDMI-1 --scale $SCALE
+fi

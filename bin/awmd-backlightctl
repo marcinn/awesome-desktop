@@ -5,6 +5,8 @@ OPT=$2
 CURRENTF=`xbacklight`
 CURRENT=${CURRENTF%.*}
 SLOWTHRESHOLD=5
+LASTBACKLIGHT=/tmp/.lastbacklight
+
 MODE="change"
 
 if (( $CURRENT <= $SLOWTHRESHOLD )); then
@@ -14,8 +16,24 @@ else
 fi
 
 case $CMD in
+    dim)
+        VAL=`xbacklight -get`
+        echo $VAL > $LASTBACKLIGHT
+        xbacklight -set $(( VAL/2 ))
+        exit 0
+        ;;
+    undim)
+        VAL=`cat $LASTBACKLIGHT`
+        xbacklight -set $VAL
+        exit 0
+        ;;
+    get)
+        xbacklight -get
+        exit 0
+        ;;
     up)
-        xbacklight -inc "$PRC";;
+        xbacklight -inc "$PRC"
+        ;;
     down)
         if (( $CURRENT > $SLOWTHRESHOLD )); then
             NEWCURRENT=`bc -l <<< "$CURRENT-$SLOWTHRESHOLD"`
@@ -31,15 +49,25 @@ case $CMD in
         ;;
     set)
         xbacklight -set $OPT -time 1
-        xbacklight
-        ;;
-    get)
+        xbacklight -get
+        exit 0
         ;;
     *)
+        xbacklight -get
+        exit 0
         ;;
 esac
 
-VAL=`xbacklight`
+VAL=`xbacklight -get`
+
+AVAIL_PIDS=`pgrep -f "osd_cat.*Brightness"`
+
+for i in "${AVAIL_PIDS[@]}"
+do
+    if [[ $i != "" ]]; then
+        kill $i
+    fi
+done
 
 case $OPT in
     quiet)

@@ -1,0 +1,160 @@
+#!/bin/env python
+
+import click
+import pulsectl
+import os
+
+
+p = pulsectl.Pulse('awmd-sound-output')
+SEP = '|'
+
+
+class UnknownCard(Exception):
+    pass
+
+
+class UnknownProfile(Exception):
+    pass
+
+
+class Favs(object):
+    def __init__(self):
+        self.profiles = []
+        self._cfg = os.path.expanduser('~/.awmd-sound-output')
+
+    def load(self):
+        try:
+            with open(self._cfg) as fh:
+                for line in fh.read().splitlines():
+                    card, profile = line.split('|')
+                    self.profiles.append((card, profile))
+        except FileNotFoundError:
+            pass
+
+    def save(self):
+        with open(self._cfg, 'w') as fh:
+            for card, profile in self.profiles:
+                fh.write(card + '|' + profile + '\n')
+
+    def add(self, card, profile):
+        if (card.name, profile.name) not in self.profiles:
+            self.profiles.append((card.name, profile.name))
+
+
+def get_card_by_name(name):
+    for card in p.card_list():
+        if card.name == name:
+            return card
+
+
+def get_profile_by_name(card, profile_name):
+    for profile in card.profile_list:
+        if profile.name == profile_name:
+            return profile
+
+
+def get_current_profile():
+    card = p.card_list()[0]
+    profile = card.profile_active
+    return (card, profile)
+
+
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+def list():
+    for card in p.card_list():
+        profiles = sorted(
+            filter(lambda x: x.available, card.profile_list),
+            key=lambda x: x.priority,
+            reverse=True
+        )
+
+        for profile in profiles:
+            active = int(profile.name == card.profile_active.name)
+            print(SEP.join([
+                f'{active}',
+                f'{card.name}',
+                f'{profile.name}',
+                f'{profile.description}'
+            ]))
+
+
+@cli.command()
+@click.argument('card')
+@click.argument('profile')
+def set(card, profile):
+    c = get_card_by_name(card)
+    np = get_profile_by_name(c, profile)
+    p.card_profile_set(c, np)
+
+
+@cli.group()
+def fav():
+    pass
+
+
+@fav.command()
+@click.argument('card')
+@click.argument('profile')
+def add(card, profile):
+    f = Favs()
+    f.load()
+    card = get_card_by_name(card)
+    profile = get_profile_by_name(card, profile)
+    f.add(card, profile)
+    f.save()
+
+
+@fav.command(name='list')
+def list_favs():
+    f = Favs()
+    f.load()
+    for cn, pn in f.profiles:
+        card = get_card_by_name(cn)
+        profile = get_profile_by_name(card, pn)
+        print(SEP.join([
+            f'{card.name}',
+            f'{profile.name}',
+        ]))
+
+
+@cli.command()
+def get():
+    for card in p.card_list():
+        print(SEP.join([
+            f'{card.name}',
+            f'{card.profile_active.name}',
+        ]))
+
+
+@cli.command()
+def switch():
+    f = Favs()
+    f.load()
+    choices = f.profiles
+    card, profile = get_current_profile()
+
+    try:
+        idx = choices.index((card.name, profile.name))
+    except ValueError:
+        next_idx = 0
+    else:
+        next_idx = idx+1
+
+    try:
+        next_card, next_profile = choices[next_idx]
+    except IndexError:
+        next_card, next_profile = choices[0]
+
+    next_card = get_card_by_name(next_card)
+    next_profile = get_profile_by_name(next_card, next_profile)
+
+    p.card_profile_set(next_card, next_profile)
+
+
+if __name__ == '__main__':
+    cli()

@@ -27,7 +27,17 @@ case $MODE in
     mute)
         pulseaudio-ctl mute
         ;;
+    mute-input)
+        pulseaudio-ctl mute-input
+        ;;
 esac
+
+AVAIL_PIDS=`pgrep -f "osd_cat.*(Volume|MUTE)"`
+
+for i in "${AVAIL_PIDS[@]}"
+do
+    kill $i;
+done
 
 readstate
 

@@ -8,6 +8,7 @@ local lgi = require("lgi")
 local gtk = lgi.require("Gtk")
 local gio = lgi.require("Gio")
 local gfs = require("gears.filesystem")
+local awmd_menu = require("awmd-menu")
 
 local THEMES_PATH = gfs.get_configuration_dir() .. 'themes/'
 
@@ -22,7 +23,7 @@ local awmd_config = {
         search = 'nautilus',
         system_monitor = 'gnome-system-monitor',
         editor = 'gedit',
-        lock = '/home/marcin/bin/awmd-lock',
+        lock = 'awmd-lock',
     },
     tags = {"term", "web", "3", "talk", "5", "6"},
     modkey = 'Mod4',
@@ -300,7 +301,7 @@ function AWMD.initOldRC(self)
     local modkey = self.conf.modkey
 
     root.buttons(gears.table.join(
-    awful.button({ }, 3, function () beautiful.menu:toggle() end),
+    awful.button({ }, 3, function () awmd_menu.get_desktop_menu():toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
     ))

@@ -10,8 +10,9 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 local awesomemenu = {
    { "hotkeys", function() return false, hotkeys_popup.show_help end},
    { "restart", awesome.restart },
+   { "suspend", "systemctl suspend" },
    { "quit", "gnome-session-quit --logout --force" },
-   { "shutdown", function () awful.spawn.with_shell("~/bin/awmd-logout") end },
+   { "shutdown", function () awful.spawn.with_shell("awmd-shutdown") end },
 }
 
 local desktopmenu = {
@@ -21,12 +22,17 @@ local desktopmenu = {
 }
 
 
+local completemenu = nil
+
 -- high level API for menu (future)
 local menu_api = {
-    get_desktop_menu = function()
-        local items = gears.table.join({}, desktopmenu)
-        table.insert(items, 1, {"AwesomeWM", awesomemenu, beautiful.awesome_icon})
-        return awful.menu({items = items})
+    get_desktop_menu = function()  -- singleton
+        if completemenu == nil then
+            local completemenuitems = gears.table.join({}, desktopmenu)
+            table.insert(completemenuitems, 1, {"AwesomeWM", awesomemenu, beautiful.awesome_icon})
+            completemenu = awful.menu({items = completemenuitems})
+        end
+        return completemenu
     end
 }
 
