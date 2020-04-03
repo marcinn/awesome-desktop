@@ -33,7 +33,7 @@ Create required extensions:
 cd ~/.config/awesome/awmd-extensions
 git clone https://github.com/pltanton/net_widgets.git
 git clone https://github.com/streetturtle/awesome-wm-widgets.git
-
+```
 
 Create empty autostart file for your programs:
 
