@@ -47,7 +47,7 @@ Restart AwesomeWM & pray.
 
 ## Goals
 
-- **configuration and extensibility without mmodyfiing LUA code**
+- **configuration and extensibility without modyfiing LUA code**
 - **sane defaults, preconfigured DE for advanced but regular user**
 - freedesktop.org: autostart
 - freedesktop.org: theming, icons
